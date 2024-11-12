@@ -1,16 +1,23 @@
 import os
 from langchain_core.prompts import PromptTemplate
-from langchain.chains.sequential import SequentialChain, SimpleSequentialChain
+# from langchain.chains.sequential import SequentialChain, SimpleSequentialChain
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers.json import JsonOutputParser
 from dotenv import load_dotenv
 
 load_dotenv('.env.local') 
 
+import langchain
+langchain.debug = False  # Or True if you want debug mode
+langchain.llm_cache = None
+
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise ValueError("No OpenAI API key found in environment variables")
 
 # initialize model
-llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model='gpt-3.5-turbo', temperature=0.5)
+llm = ChatOpenAI(api_key=OPENAI_API_KEY, model='gpt-3.5-turbo', temperature=0.5, verbose=False)
 
 # generate a question based on question type 
 generate_question_template = PromptTemplate.from_template(
@@ -39,7 +46,7 @@ explanation_chain = generate_answer_explanation | llm | JsonOutputParser()
 def generate_question(inputs: dict):
     question_results = question_chain.invoke(inputs)
 
-    if inputs["question_type"] != "fill blank":
+    if inputs["question_type"] != "fill_blank":
         return question_results # should be a json with just the question text
     
     else:
@@ -56,11 +63,11 @@ def generate_question(inputs: dict):
         }
        
 
-inputs = {"question_type":"fill blank", 
-        "difficulty":"easy", 
-        "language":"es", 
-        "native_language":"en"}
+# inputs = {"question_type":"writing_prompt", 
+#         "difficulty":"easy", 
+#         "language":"es", 
+#         "native_language":"en"}
 
-question_json = generate_question(inputs=inputs)
+# question_json = generate_question(inputs=inputs)
 
-print(question_json)
+# print(question_json)
