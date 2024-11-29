@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { signUpWithEmail, signInWithEmail } from '../lib/auth';
 
 const Auth: React.FC = () => {
