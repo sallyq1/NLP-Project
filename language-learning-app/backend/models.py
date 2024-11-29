@@ -48,9 +48,9 @@ class Question(SQLModel, table=True):
 class User_Attempt(SQLModel, table=True):
     __tablename__ = "user_attempts"
 
-    user_attempt_id: Optional[UUID] = Field(default=None, primary_key=True)
-    user_id: UUID
-    question_id: UUID
+    #user_attempt_id: Optional[UUID] = Field(default=None, primary_key=True)
+    user_id: Optional[UUID] = Field(default=None, primary_key=True)
+    question_id: Optional[UUID] = Field(default=None, primary_key=True)
     is_correct: bool
     num_asked: int
     mastery: Mastery
