@@ -12,11 +12,12 @@ SUPABASE_KEY = os.getenv('NEXT_PUBLIC_SUPABASE_ANON_KEY')
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 security = HTTPBearer()
 
-def verify_jwt(credentials: HTTPAuthorizationCredentials = Depends(security)):
+def verify_jwt(credentials: HTTPBearer = Depends(security)):
     token = credentials.credentials
     try:
-        user = supabase.auth.get_user(token)
+        user = supabase.auth.get_user()
         if not user:
+            print("no user")
             raise HTTPException(status_code=401, detail="Invalid token")
         return user
     except Exception as e:
