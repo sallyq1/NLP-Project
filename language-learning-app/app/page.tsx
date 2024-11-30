@@ -5,6 +5,8 @@ import { supabase } from './lib/supabase';
 import Auth from './components/Auth';
 import Assessment from './components/Assessment';
 import { User } from '@supabase/supabase-js';
+import LoginPage from './login/page';
+import DashboardPage from './dashboard/page';
 
 const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -26,7 +28,7 @@ const Home: React.FC = () => {
     };
   }, []);
 
-  return <div>{user ? <Assessment /> : <Auth />}</div>;
+  return <div>{user ? <DashboardPage /> : <LoginPage />}</div>;
 };
 
 export default Home;

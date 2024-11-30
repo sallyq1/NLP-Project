@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from sqlmodel import SQLModel, create_engine, Session
 
-load_dotenv('../.env.local')
+load_dotenv('.env.local')
 
 supabase_url = os.getenv('SUPABASE_CONNECTION_STRING')
 

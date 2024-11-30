@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { signUpWithEmail, signInWithEmail } from '../lib/auth';
+import React from 'react';
 
 const Auth: React.FC = () => {
   const [email, setEmail] = useState<string>('');

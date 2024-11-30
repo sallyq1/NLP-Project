@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from database import supabase
+from ..database import supabase
 from pydantic import BaseModel
 # from models import Profile
 
