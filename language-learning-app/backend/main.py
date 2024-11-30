@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException, Path
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from auth.routes import router as auth_router
-from lessons.routes import router as lessons_router
+from .auth.routes import router as auth_router
+from .lessons.routes import router as lessons_router
 
 app = FastAPI()
 
@@ -14,6 +14,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(auth_router, prefix="/auth")
 app.include_router(lessons_router, prefix="/lessons")
