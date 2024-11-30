@@ -18,11 +18,14 @@ export async function login(formData: FormData) {
   if (error) {
     redirect('/error');
   }
+  revalidatePath('/')
 
-  console.log("Session Token: ", data.session.access_token); // Get the token
-
-  revalidatePath('/', 'layout')
-  redirect('/')
+  if (data?.user) {
+    redirect('/dashboard')
+  } 
+  else {
+    redirect('/login')  // In case there's no user data
+  }
 }
 
 // export async function signup(formData: FormData) {

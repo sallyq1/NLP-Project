@@ -61,6 +61,7 @@ async def generate_store_question(
 
     return {"lesson_questions": [
         {
+            "id": q.question_id,
             "question_type": q.question_type,
             "question": q.question_content,
             "explanation": q.explanation if q.explanation else ""
@@ -73,11 +74,11 @@ async def record_user_attempt(
     question_id: UUID,
     user_answer: str,
     session: SessionDep,
-    user=Depends(verify_jwt)
+    user_id: UUID
 ):
-    if session.get(User_Attempt, (user.user.id, question_id)):
+    if session.get(User_Attempt, (user_id, question_id)):
         question = session.get(Question, question_id) # get the question
-        question_attempt = session.get(User_Attempt, (user.user.id, question_id))
+        question_attempt = session.get(User_Attempt, (user_id, question_id))
 
         # test your functions here --> bool
         is_correct = question.answer.lower().strip() == user_answer.lower().strip()
@@ -107,11 +108,11 @@ async def record_user_attempt(
 
         if not question:
             raise HTTPException(status_code=404, detail="Question not found")
-        
+                
         is_correct = question.answer.lower().strip() == user_answer.lower().strip()
 
         question_attempt = User_Attempt(
-            user_id=user.user.id,
+            user_id=user_id,
             question_id=question_id,
             is_correct=is_correct,
             num_asked=1,
@@ -123,7 +124,7 @@ async def record_user_attempt(
         session.refresh(question_attempt)
         print("added question attempt: ", question_attempt)
     
-    return question_attempt
+    return {"is_correct": is_correct}
 
     
 """

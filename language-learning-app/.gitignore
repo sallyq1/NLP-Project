@@ -8,6 +8,9 @@ env.bak/
 venv.bak/
 
 __pycache__/
+backend/__pycache__/
+backend/langchain/__pycache__/
+backend/lessons/__pycache__/
 
 # dependencies
 /node_modules
