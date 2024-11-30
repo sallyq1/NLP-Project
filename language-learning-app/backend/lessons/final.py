@@ -1,9 +1,10 @@
 import spacy
-import openai
+#import openai
+from openai import Client
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
-load_dotenv('.env.local') 
+load_dotenv(".env.local") 
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -11,6 +12,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise ValueError("No OpenAI API key found in environment variables")
 
+client = Client()
 
 def check_grammar_spacy(user_answer: str) -> int:
     doc = nlp(user_answer)
@@ -43,12 +45,12 @@ def check_grammar_spacy(user_answer: str) -> int:
 
 def check_grammar_with_gpt(sentence):
     prompt = f"Evaluate the grammar correctness of the following sentence on a scale from 0 to 100:\n\n'{user_answer}'"
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",  
         messages=[{"role": "user", "content": prompt}]
     )
     try:
-        score = int(response.choices[0].message["content"].strip())
+        score = int(response.choices[0].message.content.strip())
         return max(0, min(100, score)) 
     except ValueError:
         return 50 
@@ -87,7 +89,7 @@ def check_answer(topic: str, user_answer: str) -> bool:
 
 # Testing 
 topic = "cat"
-user_answer = "The cat climbed the tree near the road."
+user_answer = "the tree cat climb on road."
 is_correct = check_answer(topic, user_answer)
 
 if is_correct:
