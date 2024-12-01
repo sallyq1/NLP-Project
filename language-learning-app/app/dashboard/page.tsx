@@ -2,37 +2,56 @@
 
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import React from 'react'
+import React, { useState } from 'react';
 
 const DashboardPage = () => {
-    const router = useRouter()
+  const router = useRouter();
+  const [selectedLanguage, setSelectedLanguage] = useState('');
 
-    const handleGenerateLesson = async () => {
-
-        try {
-          const lang = 'en'
-          const difficulty = 'easy'
-
-          const response = await axios.post(
-            `http://localhost:8000/lessons/generate?language=${lang}&difficulty=${difficulty}`
-          )
-
-          const questions = encodeURIComponent(JSON.stringify(response.data.lesson_questions));
-          router.push(`/lesson?questions=${questions}`)
-        }
-        catch (error) {
-          console.error('Error generating lesson:', error);
-        }
+  const handleSelectLanguage = (lang: string) => {
+    if (lang === 'en') {
+      setSelectedLanguage('en');
+      router.push('/generate-lesson'); //send language code when multi-language function is added
     }
-    
+  };
+
   return (
-    <div>
-      DashboardPage
-      <button onClick={handleGenerateLesson} className='rounded-lg bg-white p-4 text-black'>generate new lesson</button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 text-center">
+      <h1 className="text-4xl font-bold text-gray-800 mb-8">Choose a Language</h1>
+      <div className="flex space-x-4">
+        <button
+          onClick={() => handleSelectLanguage('en')}
+          className="px-8 py-4 rounded-lg bg-white text-blue-600 font-semibold hover:bg-blue-100 transition-all"
+        >
+          English
+        </button>
+        <button
+          disabled
+          onClick={() => handleSelectLanguage('es')}
+          className="px-8 py-4 rounded-lg bg-gray-300 text-gray-600 font-semibold cursor-not-allowed"
+        >
+          Spanish
+        </button>
+        <button
+          disabled
+          onClick={() => handleSelectLanguage('fr')}
+          className="px-8 py-4 rounded-lg bg-gray-300 text-gray-600 font-semibold cursor-not-allowed"
+        >
+          French
+        </button>
+      </div>
+      {/* Disabled button for adding other languages */}
+      <div className="mt-12">
+        <button
+          disabled
+          className="rounded-lg bg-gray-300 px-6 py-3 text-gray-600 font-semibold cursor-not-allowed"
+        >
+          Add Language
+        </button>
+        <p className="text-sm text-gray-600 mt-2">Stay tuned for more language options!</p>
+      </div>
     </div>
-    
-  )
-}
+  );
+};
 
-export default DashboardPage
-
+export default DashboardPage;
