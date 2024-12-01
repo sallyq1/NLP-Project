@@ -22,4 +22,5 @@ export default async function Home() {
 
   // if the user is authenticated, go to dashboard
   return <DashboardPage />;
+
 }

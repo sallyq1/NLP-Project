@@ -27,18 +27,18 @@ def validate_input_in_context(sentence_with_blank, user_input):
     # Determine if the user input fits contextually
     return similarity > 0.6  # Adjust threshold as needed
 
-# Main function to test the implementation
-if __name__ == "__main__":
-    # Sentence with a blank
-    sentence = "Where did ___ go?"
+# # Main function to test the implementation
+# if __name__ == "__main__":
+#     # Sentence with a blank
+#     sentence = "Where did ___ go?"
     
-    # User inputs to test
-    user_inputs = ["dog", "person", "car", "cat"]
+#     # User inputs to test
+#     user_inputs = ["dog", "person", "car", "cat"]
     
-    # Validate each user input
-    for user_input in user_inputs:
-        is_valid = validate_input_in_context(sentence, user_input)
-        if is_valid:
-            print(f'"{user_input}" fits the sentence contextually.')
-        else:
-            print(f'"{user_input}" does not fit the sentence contextually.')
+#     # Validate each user input
+#     for user_input in user_inputs:
+#         is_valid = validate_input_in_context(sentence, user_input)
+#         if is_valid:
+#             print(f'"{user_input}" fits the sentence contextually.')
+#         else:
+#             print(f'"{user_input}" does not fit the sentence contextually.')
