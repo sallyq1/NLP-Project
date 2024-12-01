@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from ..models import Difficulty, Language, Question, QuestionType, User_Attempt
 from ..langchain.generate_questions import generate_question
 from ..dependencies import verify_jwt
-from short_answer_eval import check_answer
+from .short_answer_eval import check_answer
 
 # from models import User
 
@@ -37,7 +37,7 @@ async def generate_store_question(
             language_code=language,
             difficulty=difficulty,
             question_type="fill_blank",
-            question_content=fillBlankQuestion["question"] + "->" + str(fillBlankQuestion["choices"]),
+            question_content=fillBlankQuestion["question"], #+ "->" + str(fillBlankQuestion["choices"]),
             answer=fillBlankQuestion["correct_answer"],
             explanation=fillBlankQuestion["explanation"]
         )
