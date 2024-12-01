@@ -26,13 +26,12 @@ import { useRouter } from 'next/navigation'
 // initialize supabase client side client
 const supabase = createClient()
 
-
 export function QuestionCard(props: any) {
     const [HasChoices, setHasChoices] = useState(false)
     const [answer, setAnswer] = useState('')
     const [isCorrect, setisCorrect] = useState<boolean | null>(null)
-    const router = useRouter()
     const [user, setUser] = useState<any>(null)
+    const router = useRouter()
 
     // Get user data on mount
     useEffect(() => {

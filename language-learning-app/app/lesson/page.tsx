@@ -2,6 +2,7 @@
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import {QuestionCard} from './questionCard'
+import { useRouter } from 'next/navigation';
 
 interface LessonQuestions {
     id: string
@@ -14,6 +15,7 @@ const LessonPage = () => {
   const searchParams = useSearchParams()
   const [questions, setQuestions] = useState<any[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const router = useRouter();
 
   useEffect(() => {
     // parse questions from search params
@@ -29,6 +31,13 @@ const LessonPage = () => {
   const getAllQuestions = () => {
     return questions || []
   }
+  const handleExit = () => {
+    router.push('/generate-lesson')
+  }
+
+  const handleLogout = () => {
+    router.push('/logout'); 
+  };
 
   const handleNextQuestion = () => {
     const allQuestions = getAllQuestions() // array of all questions
@@ -60,19 +69,32 @@ const LessonPage = () => {
           question={currentQuestion.question}
         />
 
-        <button 
+        {currentQuestionIndex <= allQuestions.length - 1? 
+        (<button 
           onClick={handleNextQuestion}
           className='bg-blue-500 text-white px-4 py-2 rounded'
-          disabled={currentQuestionIndex >= allQuestions.length - 1}
         >
           Next Question
-        </button>
+        </button>) :
+        (<button 
+          onClick={handleExit}
+          className='bg-blue-500 text-white px-4 py-2 rounded'
+        >
+          Congratulations! Exit Lesson
+        </button>)}
 
         <div className='text-sm text-gray-500'>
           Question {currentQuestionIndex + 1} of {allQuestions.length}
         </div>
         
       </div>
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="mt-8 px-6 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-all"
+      >
+        Logout
+      </button>
     </div>
   )
 }

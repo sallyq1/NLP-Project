@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from ..models import Difficulty, Language, Question, QuestionType, User_Attempt
 from ..langchain.generate_questions import generate_question
 from ..dependencies import verify_jwt
+from .short_answer_eval import check_answer
 
 # from models import User
 
@@ -36,7 +37,7 @@ async def generate_store_question(
             language_code=language,
             difficulty=difficulty,
             question_type="fill_blank",
-            question_content=fillBlankQuestion["question"] + "->" + str(fillBlankQuestion["choices"]),
+            question_content=fillBlankQuestion["question"], #+ "->" + str(fillBlankQuestion["choices"]),
             answer=fillBlankQuestion["correct_answer"],
             explanation=fillBlankQuestion["explanation"]
         )
@@ -81,7 +82,10 @@ async def record_user_attempt(
         question_attempt = session.get(User_Attempt, (user_id, question_id))
 
         # test your functions here --> bool
-        is_correct = question.answer.lower().strip() == user_answer.lower().strip()
+        if question.question_type == "writing_prompt":
+            is_correct = check_answer(question.question_content, user_answer)
+        else:
+            is_correct = question.answer.lower().strip() == user_answer.lower().strip()
 
         prev_mastery = question_attempt.mastery
 
@@ -109,7 +113,10 @@ async def record_user_attempt(
         if not question:
             raise HTTPException(status_code=404, detail="Question not found")
                 
-        is_correct = question.answer.lower().strip() == user_answer.lower().strip()
+        if question.question_type == "writing_prompt":
+            is_correct = check_answer(question.question_content, user_answer)
+        else:
+            is_correct = question.answer.lower().strip() == user_answer.lower().strip()
 
         question_attempt = User_Attempt(
             user_id=user_id,
@@ -134,4 +141,4 @@ x generate question and store in db
 x edit question generation to only generate the answer in the answer field
 
 generate a test of 6 questions with other question types
-"""
+""" 
