@@ -45,6 +45,7 @@ multi_question_template = PromptTemplate.from_template(
             "Generate 2 unique fill-in-the-blank questions and 2 unique writing prompt questions.\n\n"
             "For each fill-in-the-blank question:\n"
             "- Provide the question text\n"
+            "- Use 3 underscores to make the blank like ___\n"
             "- Generate 4 answer choices and ensure there is one clear right answer\n"
             "- Identify the correct answer\n"
             "- Write a explanation to clearly explain which answer is correct and why\n\n"
