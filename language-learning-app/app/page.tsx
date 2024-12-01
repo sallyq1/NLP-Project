@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';  // to access cookies on the server
 import { createClient } from '../utils/supabase/server';  // supabase server-side client
 import LoginPage from './login/page'; 
 import DashboardPage from './dashboard/page'; 
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const supabase = await createClient();
@@ -15,7 +16,8 @@ export default async function Home() {
   
   if (error || !data?.user) {
     // if user isn't authenticated
-    return <LoginPage />;
+    console.log('redirected')
+    return <LoginPage/>
   }
 
   // if the user is authenticated, go to dashboard

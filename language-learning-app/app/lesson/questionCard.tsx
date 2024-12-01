@@ -21,9 +21,11 @@ import {
 } from "../../components/ui/select"
 import axios from 'axios'
 import { createClient } from '../../utils/supabase/client'
+import { useRouter } from 'next/navigation'
 
 // initialize supabase client side client
 const supabase = createClient()
+const router = useRouter()
 
 export function QuestionCard(props: any) {
     const [HasChoices, setHasChoices] = useState(false)
@@ -42,7 +44,7 @@ export function QuestionCard(props: any) {
             if (data?.session?.user) {
                 setUser(data.session.user)
             } else {
-                window.location.href = '/login'
+                router.push('/login')
             }
         }
         

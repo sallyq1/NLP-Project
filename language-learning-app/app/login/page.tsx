@@ -21,10 +21,14 @@ export default function LoginPage() {
             <label htmlFor="password">Password:</label>
             <input id="password" name="password" type="password" required className='p-1 rounded-md ml-3 border border-black border-opacity-15'/>
           </div>
+
         </div>
         <div className='space-x-7 mt-8'>
           <button formAction={login} className='rounded-full py-2 px-4 m-2 bg-black text-white hover:border hover:bg-white hover:text-black'>Log in</button>
-          <Link href='/signup' className='rounded-full py-2 px-4 m-2 bg-black text-white hover:border hover:bg-white hover:text-black'> Sign up </Link>
+          <button
+          className='rounded-full py-2 px-4 m-2 bg-black text-white hover:border hover:bg-white hover:text-black' 
+          onClick={() => {router.push('/signup')}}
+          >Sign up</button>
         </div>
       </form>
     </div>

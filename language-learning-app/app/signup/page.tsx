@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function SignUpPage() {
-    const router = useRouter()
+  const router = useRouter()
   return (
     <div className='flex justify-center items-center min-h-screen bg-gray-100'>
       <form className='justify-items-center bg-white p-8 rounded-lg shadow-lg w-full max-w-sm'>
@@ -28,7 +28,10 @@ export default function SignUpPage() {
           </div>
         </div>
         <div className='mt-8 space-x-7'>
-          <Link href='/login' className='rounded-full py-2 px-4 m-2 bg-black text-white hover:border hover:bg-white hover:text-black'>Log in</Link>
+        <button
+          className='rounded-full py-2 px-4 m-2 bg-black text-white hover:border hover:bg-white hover:text-black' 
+          onClick={() => {router.push('/login')}}
+          >Login</button>
           <button formAction={signup} className='rounded-full py-2 px-4 m-2 bg-black text-white hover:border hover:bg-white hover:text-black'>Sign up</button>
         </div>
       </form>
