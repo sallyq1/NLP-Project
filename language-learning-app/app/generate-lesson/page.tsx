@@ -23,6 +23,10 @@ const GenerateLessonPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    router.push('/logout'); 
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-100 to-green-300 text-center">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Generate a New Lesson</h1>
@@ -31,6 +35,14 @@ const GenerateLessonPage = () => {
         className="rounded-lg bg-white px-6 py-3 text-green-600 font-semibold hover:bg-green-100 transition-all"
       >
         Generate New Lesson
+      </button>
+
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="mt-8 px-6 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-all"
+      >
+        Logout
       </button>
     </div>
   );

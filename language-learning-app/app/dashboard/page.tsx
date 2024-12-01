@@ -15,6 +15,11 @@ const DashboardPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    //delete session data 
+    router.push('/logout'); 
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 text-center">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Choose a Language</h1>
@@ -50,6 +55,13 @@ const DashboardPage = () => {
         </button>
         <p className="text-sm text-gray-600 mt-2">Stay tuned for more language options!</p>
       </div>
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="mt-8 px-6 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-all"
+      >
+        Logout
+      </button>
     </div>
   );
 };
