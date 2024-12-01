@@ -10,6 +10,7 @@ from ..models import Difficulty, Language, Question, QuestionType, User_Attempt
 from ..langchain.generate_questions import generate_question
 from ..dependencies import verify_jwt
 from .short_answer_eval import check_answer
+from .fillintheblank import validate_input_in_context
 
 # from models import User
 
@@ -85,7 +86,8 @@ async def record_user_attempt(
         if question.question_type == "writing_prompt":
             is_correct = check_answer(question.question_content, user_answer)
         else:
-            is_correct = question.answer.lower().strip() == user_answer.lower().strip()
+            is_correct = validate_input_in_context(question.question_content, user_answer)
+
 
         prev_mastery = question_attempt.mastery
 
@@ -116,7 +118,7 @@ async def record_user_attempt(
         if question.question_type == "writing_prompt":
             is_correct = check_answer(question.question_content, user_answer)
         else:
-            is_correct = question.answer.lower().strip() == user_answer.lower().strip()
+            is_correct = validate_input_in_context(question.question_content, user_answer)
 
         question_attempt = User_Attempt(
             user_id=user_id,
