@@ -98,7 +98,7 @@ export function QuestionCard(props: QuestionCardProps) {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <div className="grid w-full items-center gap-4">
+            <div className="flex w-full items-center gap-4  ">
                 {/*
                 {HasChoices ? (
                     <div className="flex flex-col space-y-1.5">
@@ -117,22 +117,22 @@ export function QuestionCard(props: QuestionCardProps) {
                     </div>
                 ) : (
                     */}
-                    <div className="flex flex-col space-y-1.5">
-                        <Label htmlFor="answer">Enter your answer here</Label>
+                    <div className="flex flex-col px-4">
                         <Input 
                             id="answer" 
                             placeholder="Your Answer" 
                             value={answer}
                             onChange={(e) => setAnswer(e.target.value)}
+                            className='rounded-full px-5'
                         />
                     </div>
                 {//)}
                 }
 
             </div>
-            <CardFooter className="flex justify-center">
-                <Button type='submit' disabled={isSubmitting || answer.trim() === ''}>
-                {isSubmitting ? 'Submitting...' : 'Submit Answer'}
+            <CardFooter className="  justify-center mt-7">
+                <Button type='submit' disabled={isSubmitting || answer.trim() === ''} className='px-8 py-3 rounded-full  bg-[#000000]/90 text-white -ml-8'>
+                Check
                 </Button>
             </CardFooter>
           </form>

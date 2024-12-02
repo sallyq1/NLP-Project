@@ -68,25 +68,28 @@ const LessonPage = () => {
   const currentQuestion = allQuestions[currentQuestionIndex]
 
   return (
-    <div className='flex flex-col items-center justify-center h-screen space-y-4'>
+    <div className='flex flex-col items-center justify-center h-screen space-y-4 '>
+    <div className='text-lg text-black/50 font-semibold tracking-wide'>
+      QUESTION {currentQuestionIndex + 1} OF {questions.length}
+    </div>
+   
+   <div className='shadow-xl rounded-3xl p-10'>
     <QuestionCard
       id={currentQuestion.id}
       questionType={currentQuestion.question_type}
       question={currentQuestion.question}
       onAnswerSubmit={handleAnswerSubmission} // Callback when answer is submitted
     />
-
-    <div className='text-sm text-gray-500'>
-      Question {currentQuestionIndex + 1} of {questions.length}
-    </div>
+</div>
+   
 
     {/* Next Question Button */}
     <button
       onClick={handleNextQuestion}
-      className={`bg-blue-500 text-white px-4 py-2 rounded ${
+      className={`px-8 py-3 text-lg rounded-full  bg-[#23AAA7] text-white  ${
         isAnswerSubmitted && currentQuestionIndex < questions.length - 1
-          ? 'hover:bg-blue-600 cursor-pointer'
-          : 'bg-gray-400 cursor-not-allowed'
+          ? 'hover:bg-[#23AAA7] cursor-pointer'
+          : 'bg-[#23AAA7]/50 cursor-not-allowed'
       }`}
       disabled={!isAnswerSubmitted || currentQuestionIndex >= questions.length - 1}
     >
@@ -97,13 +100,13 @@ const LessonPage = () => {
     <div className='absolute top-4 right-4 space-x-4'>
       <button
         onClick={handleExitLesson}
-        className='px-4 py-2 rounded bg-gray-600 text-white font-semibold hover:bg-gray-700 transition-all'
+        className='px-8 py-3 text-lg rounded-full  bg-[#23AAA7]/20 text-[#23AAA7] font-semibold hover:bg-[#23AAA7]/40 transition-all'
       >
         Exit Lesson
       </button>
       <button
         onClick={handleLogout}
-        className='px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition-all'
+        className='px-8 py-3 text-lg rounded-full bg-[#23AAA7]   text-white font-semibold hover:bg-[#23AAA7]/80 transition-all'
       >
         Logout
       </button>
