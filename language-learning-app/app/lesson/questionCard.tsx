@@ -26,11 +26,19 @@ import { useRouter } from 'next/navigation'
 // initialize supabase client side client
 const supabase = createClient()
 
-export function QuestionCard(props: any) {
-    const [HasChoices, setHasChoices] = useState(false)
+interface QuestionCardProps {
+    id: string
+    questionType: string
+    question: string
+    onAnswerSubmit: (isCorrect: boolean) => void //pass submission status
+  }
+
+export function QuestionCard(props: QuestionCardProps) {
+    //const [HasChoices, setHasChoices] = useState(false)
     const [answer, setAnswer] = useState('')
     const [isCorrect, setisCorrect] = useState<boolean | null>(null)
     const [user, setUser] = useState<any>(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const router = useRouter()
 
     // Get user data on mount
@@ -55,10 +63,12 @@ export function QuestionCard(props: any) {
         // clear the answer whenever the question ID changes
         setAnswer('');
         setisCorrect(null); // reset is correct state
+        setIsSubmitting(false)
     }, [props.id]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault() // prevent form from reloading the page
+        setIsSubmitting(true)
 
         try {
             if (!user) {
@@ -70,11 +80,13 @@ export function QuestionCard(props: any) {
                 `http://localhost:8000/lessons/attempt?user_answer=${answer}&question_id=${props.id}&user_id=${user.id}`,
             )
 
-            setisCorrect(response.data.is_correct)
-            
+            setisCorrect(response.data.is_correct)    
         }
         catch (error) {
           console.error('Error verifying the answer: ', error);
+        }
+        finally {
+            props.onAnswerSubmit(true);
         }
     }
 
@@ -87,6 +99,7 @@ export function QuestionCard(props: any) {
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="grid w-full items-center gap-4">
+                {/*
                 {HasChoices ? (
                     <div className="flex flex-col space-y-1.5">
                         <Label htmlFor="choices">Answer Choices</Label>
@@ -103,6 +116,7 @@ export function QuestionCard(props: any) {
                         </Select>
                     </div>
                 ) : (
+                    */}
                     <div className="flex flex-col space-y-1.5">
                         <Label htmlFor="answer">Enter your answer here</Label>
                         <Input 
@@ -112,11 +126,14 @@ export function QuestionCard(props: any) {
                             onChange={(e) => setAnswer(e.target.value)}
                         />
                     </div>
-                )}
+                {//)}
+                }
 
             </div>
             <CardFooter className="flex justify-center">
-                <Button type='submit'>Submit Answer</Button>
+                <Button type='submit' disabled={isSubmitting || answer.trim() === ''}>
+                {isSubmitting ? 'Submitting...' : 'Submit Answer'}
+                </Button>
             </CardFooter>
           </form>
           {isCorrect != null && (

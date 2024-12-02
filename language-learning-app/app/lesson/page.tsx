@@ -15,6 +15,7 @@ const LessonPage = () => {
   const searchParams = useSearchParams()
   const [questions, setQuestions] = useState<any[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -31,13 +32,18 @@ const LessonPage = () => {
   const getAllQuestions = () => {
     return questions || []
   }
-  const handleExit = () => {
-    router.push('/generate-lesson')
-  }
 
   const handleLogout = () => {
-    router.push('/logout'); 
+    router.push('/logout')
   };
+
+  const handleExitLesson = () => {
+    router.push('/dashboard')
+  }
+
+  const handleAnswerSubmission = (submitted: boolean) => {
+    setIsAnswerSubmitted(true)
+  }
 
   const handleNextQuestion = () => {
     const allQuestions = getAllQuestions() // array of all questions
@@ -45,6 +51,7 @@ const LessonPage = () => {
     // update index of question if there are more questions left to ask
     if (currentQuestionIndex < allQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1)
+      setIsAnswerSubmitted(false)
     }
   }
 
@@ -61,42 +68,48 @@ const LessonPage = () => {
   const currentQuestion = allQuestions[currentQuestionIndex]
 
   return (
-    <div className='flex items-center justify-center h-screen'>
-      <div className='flex flex-col items-center space-y-4'>
-        <QuestionCard 
-          id={currentQuestion.id}
-          questionType={currentQuestion.question_type}
-          question={currentQuestion.question}
-        />
+    <div className='flex flex-col items-center justify-center h-screen space-y-4'>
+    <QuestionCard
+      id={currentQuestion.id}
+      questionType={currentQuestion.question_type}
+      question={currentQuestion.question}
+      onAnswerSubmit={handleAnswerSubmission} // Callback when answer is submitted
+    />
 
-        {currentQuestionIndex <= allQuestions.length - 1? 
-        (<button 
-          onClick={handleNextQuestion}
-          className='bg-blue-500 text-white px-4 py-2 rounded'
-        >
-          Next Question
-        </button>) :
-        (<button 
-          onClick={handleExit}
-          className='bg-blue-500 text-white px-4 py-2 rounded'
-        >
-          Congratulations! Exit Lesson
-        </button>)}
+    <div className='text-sm text-gray-500'>
+      Question {currentQuestionIndex + 1} of {questions.length}
+    </div>
 
-        <div className='text-sm text-gray-500'>
-          Question {currentQuestionIndex + 1} of {allQuestions.length}
-        </div>
-        
-      </div>
-      {/* Logout Button */}
+    {/* Next Question Button */}
+    <button
+      onClick={handleNextQuestion}
+      className={`bg-blue-500 text-white px-4 py-2 rounded ${
+        isAnswerSubmitted && currentQuestionIndex < questions.length - 1
+          ? 'hover:bg-blue-600 cursor-pointer'
+          : 'bg-gray-400 cursor-not-allowed'
+      }`}
+      disabled={!isAnswerSubmitted || currentQuestionIndex >= questions.length - 1}
+    >
+      {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'End of Lesson'}
+    </button>
+
+    {/* Logout and Exit Buttons */}
+    <div className='absolute top-4 right-4 space-x-4'>
+      <button
+        onClick={handleExitLesson}
+        className='px-4 py-2 rounded bg-gray-600 text-white font-semibold hover:bg-gray-700 transition-all'
+      >
+        Exit Lesson
+      </button>
       <button
         onClick={handleLogout}
-        className="mt-8 px-6 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-all"
+        className='px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition-all'
       >
         Logout
       </button>
     </div>
-  )
+  </div>
+)
 }
 
 export default LessonPage
