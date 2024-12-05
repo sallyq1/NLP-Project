@@ -20,9 +20,9 @@ def check_grammar_spacy(user_answer: str) -> int:
 
     # Check for subject-verb presence
     has_subject = any(token.dep_ in ("nsubj", "nsubjpass") for token in doc)
-    has_verb = any(token.pos_ == "VERB" for token in doc)
+    has_verb = any(token.pos_ in ("VERB", "AUX") for token in doc)
 
-    excessive_punct = len([t for t in doc if t.is_punct]) > 3
+    excessive_punct = len([t for t in doc if t.is_punct]) > 5
 
     if not has_subject:
         errors += 1
@@ -88,14 +88,14 @@ def check_answer(topic: str, user_answer: str) -> bool:
     final_score = calculate_final_score(spacy_score, gpt_score, similarity_score)
     print(f"Final Score: {final_score}")
 
-    is_correct = final_score >= 88
+    is_correct = final_score >= 80
 
     return is_correct, corrected_ans
 
 #'''
 # Testing 
-topic = "Write about food."
-user_answer = "I eat food every day. ate dinner outside later today. go chinese restaurant."
+topic = "Write a short paragraph describing your favorite food. Include details such as its taste, ingredients, and why you enjoy it."
+user_answer = "My favorite food is pasta with mushrooms, chicken, spinach, and bechamel sauce."
 is_correct, correct_ans = check_answer(topic, user_answer)
 
 if is_correct:
