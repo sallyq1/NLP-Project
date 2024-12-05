@@ -39,6 +39,7 @@ export function QuestionCard(props: QuestionCardProps) {
     const [isCorrect, setisCorrect] = useState<boolean | null>(null)
     const [user, setUser] = useState<any>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [correctedAns, setCorrectedAns] = useState("")
     const router = useRouter()
 
     // Get user data on mount
@@ -64,6 +65,7 @@ export function QuestionCard(props: QuestionCardProps) {
         setAnswer('');
         setisCorrect(null); // reset is correct state
         setIsSubmitting(false)
+        setCorrectedAns("")
     }, [props.id]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -80,7 +82,11 @@ export function QuestionCard(props: QuestionCardProps) {
                 `http://localhost:8000/lessons/attempt?user_answer=${answer}&question_id=${props.id}&user_id=${user.id}`,
             )
 
-            setisCorrect(response.data.is_correct)    
+            setisCorrect(response.data.is_correct)  
+            if (!response.data.is_correct) {
+                //alert(`Incorrect. Corrected Answer: ${response.data.corrected_answer}`);
+                setCorrectedAns(response.data.corrected_answer)
+            }   
         }
         catch (error) {
           console.error('Error verifying the answer: ', error);
@@ -141,7 +147,10 @@ export function QuestionCard(props: QuestionCardProps) {
                         {isCorrect ? (
                             <p className="text-green-500 font-bold">Correct Answer!</p>
                         ) : (
-                            <p className="text-red-500 font-bold">Incorrect Answer.</p>
+                            <div>
+                                <p className="text-red-500 font-bold">Incorrect Answer.</p>
+                                <p className="text-gray-600">Corrected Answer: {correctedAns}</p>
+                            </div>
                         )}
                     </div>
                 )}

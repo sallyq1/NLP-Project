@@ -44,16 +44,20 @@ def check_grammar_spacy(user_answer: str) -> int:
         return 25
 
 def check_grammar_with_gpt(sentence):
-    prompt = f"Evaluate the grammar correctness of the following sentence and only return a score on a scale from 0 to 100:\n\n'{sentence}'"
+    prompt = f"Evaluate the grammar correctness of the following sentence and return a score on a scale from 0 to 100. If the score is not a 100, return the correct version of the sentence:\n\n'{sentence}\n\n Use the following template for your response:\n\n [Score]->[correct sentence or 'NULL' if score is 100]'"
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",  
         messages=[{"role": "user", "content": prompt}]
     )
+    response_text = response.choices[0].message.content.strip()
+
     try:
-        score = int(response.choices[0].message.content.strip())
-        return max(0, min(100, score)) 
-    except ValueError:
-        return 50 
+        score, corrected_sentence = response_text.split("->", 1)
+        score = int(score.strip())
+        score = max(0, min(100, score))
+        return score, corrected_sentence.strip() 
+    except (ValueError, IndexError):
+        return 50, "Error parsing response"
     
 def check_similarity(topic: str, user_answer: str) -> int:
     topic_doc = nlp(topic)
@@ -75,7 +79,7 @@ def check_answer(topic: str, user_answer: str) -> bool:
     spacy_score = check_grammar_spacy(user_answer)
     print(f"SpaCy Grammar Score: {spacy_score}")
 
-    gpt_score = check_grammar_with_gpt(user_answer)
+    gpt_score, corrected_ans = check_grammar_with_gpt(user_answer)
     print(f"GPT Grammar Score: {gpt_score}")
 
     similarity_score = check_similarity(topic, user_answer)
@@ -84,15 +88,20 @@ def check_answer(topic: str, user_answer: str) -> bool:
     final_score = calculate_final_score(spacy_score, gpt_score, similarity_score)
     print(f"Final Score: {final_score}")
 
-    return final_score >= 85
+    is_correct = final_score >= 88
 
+    return is_correct, corrected_ans
 
+#'''
 # Testing 
 topic = "Write about food."
-user_answer = "I love to go swimming."
-is_correct = check_answer(topic, user_answer)
+user_answer = "I eat food every day. ate dinner outside later today. go chinese restaurant."
+is_correct, correct_ans = check_answer(topic, user_answer)
 
 if is_correct:
-    print("The user's answer is correct and relevant.")
+    print(f"The user's answer is correct and relevant.  {correct_ans}")
 else:
-    print("The user's answer is either off-topic or grammatically incorrect.")
+    print(f"The user's answer is either off-topic or grammatically incorrect. {correct_ans}")
+
+#
+# '''

@@ -84,9 +84,10 @@ async def record_user_attempt(
 
         # test your functions here --> bool
         if question.question_type == "writing_prompt":
-            is_correct = check_answer(question.question_content, user_answer)
+            is_correct, corrected_ans = check_answer(question.question_content, user_answer)
         else:
             is_correct = validate_input_in_context(question.question_content, user_answer)
+            corrected_ans = ""
 
 
         prev_mastery = question_attempt.mastery
@@ -116,9 +117,10 @@ async def record_user_attempt(
             raise HTTPException(status_code=404, detail="Question not found")
                 
         if question.question_type == "writing_prompt":
-            is_correct = check_answer(question.question_content, user_answer)
+            is_correct, corrected_ans = check_answer(question.question_content, user_answer)
         else:
             is_correct = validate_input_in_context(question.question_content, user_answer)
+            corrected_ans = ""
 
         question_attempt = User_Attempt(
             user_id=user_id,
@@ -133,7 +135,7 @@ async def record_user_attempt(
         session.refresh(question_attempt)
         print("added question attempt: ", question_attempt)
     
-    return {"is_correct": is_correct}
+    return {"is_correct": is_correct, "corrected_answer": corrected_ans}
 
     
 """
