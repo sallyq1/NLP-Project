@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+spacy
+en-core-web-md==3.7.1
+langchain
+langchain-openai
+langchain-community
+pydantic
+sqlmodel
+python-dotenv
+supabase
+psycopg2
+
