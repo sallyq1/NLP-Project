@@ -6,7 +6,7 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(".env.local") 
 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_md")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
@@ -37,14 +37,14 @@ def check_grammar_spacy(user_answer: str) -> int:
     if errors == 0:
         return 100
     elif errors == 1:
-        return 85
+        return 75
     elif errors == 2:
-        return 70
-    else:
         return 50
+    else:
+        return 25
 
 def check_grammar_with_gpt(sentence):
-    prompt = f"Evaluate the grammar correctness of the following sentence on a scale from 0 to 100:\n\n'{user_answer}'"
+    prompt = f"Evaluate the grammar correctness of the following sentence and only return a score on a scale from 0 to 100:\n\n'{sentence}'"
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",  
         messages=[{"role": "user", "content": prompt}]
@@ -68,7 +68,7 @@ def calculate_final_score(spacy_score: int, gpt_score: int, similarity_score: in
     - SpaCy Grammar Check: 30%
     - Similarity Check: 20%
     """
-    final_score = (0.5 * gpt_score) + (0.3 * spacy_score) + (0.2 * similarity_score)
+    final_score = (0.4 * gpt_score) + (0.3 * spacy_score) + (0.3 * similarity_score)
     return int(final_score)
 
 def check_answer(topic: str, user_answer: str) -> bool:
@@ -84,12 +84,12 @@ def check_answer(topic: str, user_answer: str) -> bool:
     final_score = calculate_final_score(spacy_score, gpt_score, similarity_score)
     print(f"Final Score: {final_score}")
 
-    return final_score >= 70
+    return final_score >= 85
 
 
 # Testing 
-topic = "cat"
-user_answer = "the tree cat climb on road."
+topic = "Write about food."
+user_answer = "I love to go swimming."
 is_correct = check_answer(topic, user_answer)
 
 if is_correct:
