@@ -44,7 +44,7 @@ def check_grammar_spacy(user_answer: str) -> int:
         return 25
 
 def check_grammar_with_gpt(sentence):
-    prompt = f"Evaluate the grammar correctness of the following sentence and return a score on a scale from 0 to 100. If the score is not a 100, return the correct version of the sentence:\n\n'{sentence}\n\n Use the following template for your response:\n\n [Score]->[correct sentence or 'NULL' if score is 100]'"
+    prompt = f"Evaluate the grammar correctness of the following sentence and return a score on a scale from 0 to 100. If the score is not a 100, return the correct version of the sentence. Make sure the corrected sentence is grammatically correct, makes sense, and uses the right verbs, tenses, etc:\n\n'{sentence}\n\n Use the following template for your response:\n\n [Score]->[correct sentence or 'NULL' if score is 100]'"
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",  
         messages=[{"role": "user", "content": prompt}]
