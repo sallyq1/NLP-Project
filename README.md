@@ -6,6 +6,9 @@ Language learning applications are widely used, but most fail to provide persona
 2. Run  `cd backend` to access the backend folder
 3. Run  `pip install -r requirements.txt` to install required dependencies
 4. Run `python -m spacy download en_core_web_md` to install additional required dataset
+5. Open another terminal window `cd language-learning-app`
+6. Run  `cd app` to access the frontend folder
+7. Run  `npm install` to install required dependencies
 
 
 ## How to Run:
