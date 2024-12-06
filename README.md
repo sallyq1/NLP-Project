@@ -1,6 +1,13 @@
 # Fluently 
 Language learning applications are widely used, but most fail to provide personalized lessons and feedback based on a user’s real-time performance. This project aims to bridge this gap by creating a language learning app that adapts question difficulty dynamically based on user performance in open-ended exercises. The app generates personalized lessons for each user based on their skill level and analyzes user responses using natural language processing (NLP) techniques to provide real-time feedback on grammar, vocabulary, and semantic comprehension.
 
+## How to Install Required Dependencies:
+1. Open a terminal window `cd language-learning-app`
+2. Run  `cd backend` to access the backend folder
+3. Run  `pip install -r requirements.txt` to install required dependencies
+4. Run `python -m spacy download en_core_web_md` to install additional required dataset
+
+
 ## How to Run:
 1. Open a terminal window `cd language-learning-app`
 2. Run `uvicorn backend.app:main --reload` to start the server
